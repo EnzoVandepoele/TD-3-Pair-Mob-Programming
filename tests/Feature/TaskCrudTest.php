@@ -24,4 +24,16 @@ class TaskCrudTest extends TestCase
         $this->patch(route('tasks.complete', $task))->assertRedirect();
         $this->assertTrue($task->fresh()->is_completed);
     }
+
+    public function test_update_and_delete_task()
+    {
+        $this->post(route('tasks.store'), ['title' => 'A éditer']);
+        $task = \App\Models\Task::first();
+
+        $this->put(route('tasks.update', $task), ['title' => 'Titre modifié'])->assertRedirect();
+        $this->assertDatabaseHas('tasks', ['id' => $task->id, 'title' => 'Titre modifié']);
+
+        $this->delete(route('tasks.destroy', $task))->assertRedirect();
+        $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
+    }
 }

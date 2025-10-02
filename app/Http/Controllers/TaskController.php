@@ -37,4 +37,22 @@ class TaskController extends Controller
         }
         return back()->with('success', 'Tâche marquée comme terminée.');
     }
+
+    public function edit(\App\Models\Task $task)
+    {
+        $boards = \App\Models\Board::all();
+        return view('tasks.edit', compact('task','boards'));
+    }
+
+    public function update(UpdateTaskRequest $request, \App\Models\Task $task)
+    {
+        $task->update($request->validated());
+        return redirect()->route('tasks.index')->with('success', 'Tâche modifiée.');
+    }
+
+    public function destroy(\App\Models\Task $task)
+    {
+        $task->delete();
+        return redirect()->route('tasks.index')->with('success', 'Tâche supprimée.');
+    }
 }
