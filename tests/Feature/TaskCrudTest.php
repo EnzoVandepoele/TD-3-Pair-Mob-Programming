@@ -1,0 +1,18 @@
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class TaskCrudTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_creates_task_and_validates_title()
+    {
+        $this->post(route('tasks.store'), ['title' => ''])->assertSessionHasErrors('title');
+        $this->post(route('tasks.store'), ['title' => 'Ma première tâche'])->assertRedirect(route('tasks.index'));
+        $this->assertDatabaseHas('tasks', ['title' => 'Ma première tâche']);
+    }
+}
