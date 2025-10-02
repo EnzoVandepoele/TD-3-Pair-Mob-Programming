@@ -15,4 +15,13 @@ class TaskCrudTest extends TestCase
         $this->post(route('tasks.store'), ['title' => 'Ma première tâche'])->assertRedirect(route('tasks.index'));
         $this->assertDatabaseHas('tasks', ['title' => 'Ma première tâche']);
     }
+
+    public function test_mark_task_complete()
+    {
+        $response = $this->post(route('tasks.store'), ['title' => 'Task à terminer']);
+        $task = \App\Models\Task::first();
+
+        $this->patch(route('tasks.complete', $task))->assertRedirect();
+        $this->assertTrue($task->fresh()->is_completed);
+    }
 }

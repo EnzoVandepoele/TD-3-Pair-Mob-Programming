@@ -30,5 +30,11 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'Tâche créée.');
     }
 
-    // autres méthodes (edit, update, destroy, complete) viendront aux exercices suivants
+    public function complete(\App\Models\Task $task)
+    {
+        if (! $task->is_completed) {
+            $task->update(['is_completed' => true]);
+        }
+        return back()->with('success', 'Tâche marquée comme terminée.');
+    }
 }

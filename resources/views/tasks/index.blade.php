@@ -40,8 +40,23 @@
                 @if($task->board) <small class="text-muted">— {{ $task->board->name }}</small> @endif
                 </div>
 
-                <div class="btn-group" role="group" aria-label="actions">
-                <!-- Les boutons compléter/modifier/supprimer seront ajoutés dans les exercices suivants -->
+                <div class="btn-group" role="group">
+                    @if(! $task->is_completed)
+                        <form action="{{ route('tasks.complete', $task) }}" method="POST" style="display:inline">
+                        @csrf
+                        @method('PATCH')
+                        <button class="btn btn-success btn-sm">Terminer</button>
+                        </form>
+                    @endif
+
+                    <a href="{{ route('tasks.edit', $task) }}" class="btn btn-secondary btn-sm">Modifier</a>
+
+                    <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="display:inline" onsubmit="return confirm('Supprimer ?');">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                </div>
             </div>
         </li>
         @empty
